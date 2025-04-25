@@ -1,23 +1,17 @@
-import psycopg2
-import os
-import toml
-from prompt_config_neon import PROMPT_TEMPLATE, BRAND_NAMES, CATEGORIES, INDIVIDUAL_CATEGORIES, SAMPLE_QUESTIONS
+import streamlit as st
 import google.generativeai as genai
+import psycopg2
 import logging
 import time
 from psycopg2 import OperationalError
+from prompt_config_neon import PROMPT_TEMPLATE, BRAND_NAMES, CATEGORIES, INDIVIDUAL_CATEGORIES, SAMPLE_QUESTIONS
 
 # Configure logging to ERROR only
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-# Load secrets.toml from the project root directory
-# Load secrets.toml from the project root directory
-project_root = os.path.abspath(os.path.dirname(__file__))
-secrets_path = os.path.join(project_root, "secrets.toml")
-with open(secrets_path, "r") as f:
-    secrets = toml.load(f)
-GOOGLE_API_KEY = secrets.get("GEMINI_API_KEY")
+# Access secrets from Streamlit's secrets management
+GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Database connection
@@ -26,13 +20,13 @@ def get_db_connection(max_attempts=3, delay=5):
     while attempt <= max_attempts:
         try:
             conn = psycopg2.connect(
-                dbname=secrets.get("DB_NAME", "neondb"),
-                user=secrets.get("DB_USER", "neondb_owner"),
-                password=secrets.get("DB_PASSWORD", "npg_s7ZtPY4rzBWb"),
-                host=secrets.get("DB_HOST", "100.26.116.133"),
+                dbname=st.secrets.get("DB_NAME", "neondb"),
+                user=st.secrets.get("DB_USER", "neondb_owner"),
+                password=st.secrets.get("DB_PASSWORD", "npg_s7ZtPY4rzBWb"),
+                host=st.secrets.get("DB_HOST", "100.26.116.133"),
                 port="5432",
                 sslmode="require",
-                options=f"endpoint={secrets.get('DB_ENDPOINT', 'ep-solitary-breeze-a44gdzow')}"
+                options=f"endpoint={st.secrets.get('DB_ENDPOINT', 'ep-solitary-breeze-a44gdzow')}"
             )
             return conn
         except OperationalError as e:
