@@ -4,14 +4,6 @@ import pandas as pd
 from datetime import datetime
 import psycopg2
 from app_direct_db_neon import generate_sql_query, get_db_connection
-import os
-import toml
-
-# Load secrets.toml from the project root directory
-project_root = os.path.abspath(os.path.dirname(__file__))
-secrets_path = os.path.join(project_root, "secrets.toml")
-with open(secrets_path, "r") as f:
-    secrets = toml.load(f)
 
 # Streamlit page configuration
 st.set_page_config(page_title="Myntra Inventory Analysis", layout="wide")
