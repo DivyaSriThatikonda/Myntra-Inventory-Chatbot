@@ -800,3 +800,4 @@ with st.container():
         else:
             st.info("No alerts at this time.")
         st.session_state.alerts_run = False
+
