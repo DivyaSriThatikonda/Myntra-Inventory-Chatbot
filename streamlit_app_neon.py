@@ -712,10 +712,10 @@ with st.container():
         fig.update_traces(textinfo='none')  # Remove text on chart
         fig.update_traces(hovertemplate='%{percent:.1%}')  # Show percentage on hover
         st.plotly_chart(fig, use_container_width=True)
-        # Category revenue table with revenue in crores
-        cat_df['RevenueInCrores'] = cat_df['revenueinrs'] / 1000  # Convert billions to crores
+        # Category revenue table with revenue in billions
+        cat_df['RevenueInBillions'] = cat_df['revenueinrs']  # Already in billions
         st.write("**Revenue by Category:**")
-        st.dataframe(cat_df[["category", "RevenueInCrores"]].style.format({"RevenueInCrores": "{:.2f} Cr"}),
+        st.dataframe(cat_df[["category", "RevenueInBillions"]].style.format({"RevenueInBillions": "{:.2f} Bn"}),
                      use_container_width=True)
 
     # Dropdown for additional visuals
@@ -734,20 +734,20 @@ with st.container():
         query += " GROUP BY brandname ORDER BY revenueinrs DESC LIMIT 5"
         brand_df = run_query(query, engine, _cache_key=f"top_brands_{time_filter}", user_query="brand revenue")
         if not brand_df.empty:
-            # Convert revenue to crores for display and debug print
-            brand_df['revenue_crores'] = brand_df['revenueinrs'] / 1000  # Convert billions to crores
-            print(f"Debug: brand_df['revenue_crores'] = {brand_df['revenue_crores'].tolist()}")  # Debug output
+            # Use revenueinrs directly since it's already in billions
+            print(f"Debug: brand_df['revenueinrs'] (in billions) = {brand_df['revenueinrs'].tolist()}")  # Debug output
             fig = px.bar(brand_df,
-                         x="revenue_crores",
+                         x="revenueinrs",
                          y="brandname",
-                         title="Top 5 Brands by Revenue (in Crores)",
+                         title="Top 5 Brands by Revenue (in Billions)",
                          color="brandname",
                          color_discrete_sequence=px.colors.sequential.Peach[::-1],
                          hover_data={"revenueinrs": ":,.0f"},  # Show raw rupees in tooltip
-                         text=brand_df['revenue_crores'].round(2))
-            fig.update_traces(texttemplate='₹%{text} Cr', textposition='inside')
-            fig.update_layout(xaxis_title="Revenue (₹ in Crores)")
+                         text=brand_df['revenueinrs'].round(2))
+            fig.update_traces(texttemplate='₹%{text} Bn', textposition='inside')
+            fig.update_layout(xaxis_title="Revenue (₹ in Billions)")
             st.plotly_chart(fig, use_container_width=True)
+
     # Top 5 Individual Categories by Revenue
     elif visual_option == "Top 5 Individual Categories by Revenue":
         query = "SELECT individual_category, SUM(revenueinrs) as revenueinrs FROM sales_and_stock_info"
@@ -756,19 +756,18 @@ with st.container():
         query += " GROUP BY individual_category ORDER BY revenueinrs DESC LIMIT 5"
         cat_ind_df = run_query(query, engine, _cache_key=f"top_categories_{time_filter}", user_query="category revenue")
         if not cat_ind_df.empty:
-            # Convert revenue to crores for display and debug print
-            cat_ind_df['revenue_crores'] = cat_ind_df['revenueinrs'] / 1000  # Convert billions to crores
-            print(f"Debug: cat_ind_df['revenue_crores'] = {cat_ind_df['revenue_crores'].tolist()}")  # Debug output
+            # Use revenueinrs directly since it's already in billions
+            print(f"Debug: cat_ind_df['revenueinrs'] (in billions) = {cat_ind_df['revenueinrs'].tolist()}")  # Debug output
             fig = px.bar(cat_ind_df,
-                         x="revenue_crores",
+                         x="revenueinrs",
                          y="individual_category",
-                         title="Top 5 Individual Categories by Revenue (in Crores)",
+                         title="Top 5 Individual Categories by Revenue (in Billions)",
                          color="individual_category",
                          color_discrete_sequence=px.colors.sequential.Peach[::-1],
                          hover_data={"revenueinrs": ":,.0f"},  # Show raw rupees in tooltip
-                         text=cat_ind_df['revenue_crores'].round(2))
-            fig.update_traces(texttemplate='₹%{text} Cr', textposition='inside')
-            fig.update_layout(xaxis_title="Revenue (₹ in Crores)")
+                         text=cat_ind_df['revenueinrs'].round(2))
+            fig.update_traces(texttemplate='₹%{text} Bn', textposition='inside')
+            fig.update_layout(xaxis_title="Revenue (₹ in Billions)")
             st.plotly_chart(fig, use_container_width=True)
 
     # Revenue Distribution by Gender
@@ -809,4 +808,3 @@ with st.container():
         else:
             st.info("No alerts at this time.")
         st.session_state.alerts_run = False
-
