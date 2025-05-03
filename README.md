@@ -15,7 +15,7 @@ Check it out: [myntra-inventory-chatbot.streamlit.app](https://myntra-inventory-
   - Top 5 brands by revenue (e.g., H&M at ₹328,230,000,000).
   - Top 5 styles by revenue (e.g., jeans, kurtas).
   - Sales split by gender (e.g., 60% women).
-  - Top 10 low-stock alerts with stockout dates (e.g., “Nike sneakers, stockout by 2025-05-10”).
+  - Top 10 low-stock alerts with predicted stockout dates .
 - **Chill UI**: Pastel cream-peach theme, sidebar for questions, and 5-question history tracker.
 - **Download Data**: Grab query results as CSV.
 - **Fast Vibes**: **Streamlit** caching keeps it snappy.
@@ -29,12 +29,12 @@ Check it out: [myntra-inventory-chatbot.streamlit.app](https://myntra-inventory-
 ## Frontend Details 🎨
 - **Framework**: **Streamlit** for a clean, interactive UI.
 - **UI Layout**:
-  - **Sidebar**: Input questions and pick time periods (7, 30, 90 days, all time).
-  - **Main Panel**: Shows query results, **Plotly** charts, and Top 10 alerts.
+  - **Sidebar**: Input questions and get the answers about the inventory. 
+  - **Main Panel**: Shows query results, **Plotly** charts along with the time periods (7, 30, 90 days, all time), and Top 10 alerts for low stock.
   - **History Tracker**: Remembers your last 5 questions using **Streamlit** session state.
 - **Charts** (via **Plotly Express**):
   - Bar charts: Top 5 brands and styles by revenue, with rupees (e.g., ₹328,230,000,000).
-  - Pie chart: Gender sales split with hover percentages (e.g., 60% women).
+  - Pie chart: Revenue split by category and Gender sales split with hover percentages (e.g., 60% women).
   - Time Filters: Dropdown for 7, 30, 90 days, or all time to scope data.
 - **Alerts**: Top 10 low-stock warnings with `predicted_stockout_date` (e.g., “Nike sneakers low, stockout by 2025-05-10”).
 - **Style**: Pastel cream-peach theme for a fresh, modern look.
@@ -44,7 +44,7 @@ Check it out: [myntra-inventory-chatbot.streamlit.app](https://myntra-inventory-
 - **Overview**: Two CSV files power the app, with 500+ brands, 50+ subcategories (e.g., kurtas, jeans, shirts), and 5+ categories (e.g., top wear, bottom wear).
 - **`myntra_fashion_clothing`** (104,237 rows, 14 columns):
   - `url`: Product’s web link (e.g., myntra.com/jeans/123).
-  - `product_id`: Unique item ID (e.g., P12345).
+  - `product_id`: Unique item ID (e.g., 12345).
   - `brandname`: Brand (e.g., Levi’s, H&M).
   - `category`: Main group (e.g., top wear).
   - `individual_category`: Style (e.g., shirts, jeans).
@@ -83,7 +83,7 @@ Wanna make it cook? Here’s how:
    git clone https://github.com/DivyaSriThatikonda/Myntra-Inventory-Chatbot.git
    ```
 2. **What You Need**:
-   - Python 3.8+
+   - Python 3.10+
    - **Neon** PostgreSQL account
    - **Gemini API** key (from Google AI Studio)
    - Packages: `streamlit`, `plotly`, `pandas`, `sqlalchemy`, `psycopg2`, `langchain`, `google-generativeai`
@@ -92,7 +92,7 @@ Wanna make it cook? Here’s how:
    pip install -r requirements.txt
    ```
 4. **Setup Steps**:
-   - Add your **Neon** connection string (e.g., `postgresql://user:password@ep-solitary-breeze-a44gdzow-pooler.us-east-1.aws.neon.tech/neondb`) and **Gemini API** key to `.env`.
+   - Add your **Neon** connection string  and **Gemini API** key to `.env`.
    - Load `myntra_fashion_clothing.csv` and `sales_and_stock_info.csv` into **Neon** using `psql \copy`.
 5. **Run the App**:
    ```bash
@@ -113,7 +113,7 @@ Wanna make it cook? Here’s how:
 - **Tools**: PyCharm, psql, GitHub, Streamlit Cloud
 
 ## Wanna Connect? 🤝
-Hit me up on LinkedIn or scope the code! This project’s my jam for data science or engineering gigs. 😄
+Hit me up on LinkedIn or scope the code! 
 
 **Connect**: [LinkedIn](#)  
 **Live Demo**: [myntra-inventory-chatbot.streamlit.app](https://myntra-inventory-chatbot-e4pjybdmi2pbfvdypumcda.streamlit.app/)
