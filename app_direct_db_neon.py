@@ -1,17 +1,16 @@
 from dotenv import load_dotenv
 import os
-import streamlit as st
-from openai import OpenAI
-from sqlalchemy import create_engine
 import logging
 import time
+from openai import OpenAI
+from sqlalchemy import create_engine
 from prompt_config_neon import PROMPT_TEMPLATE, BRAND_NAMES, CATEGORIES, INDIVIDUAL_CATEGORIES, SAMPLE_QUESTIONS
 
 # Load .env file
 load_dotenv()
 
-# Configure logging to ERROR only
-logging.basicConfig(level=logging.ERROR)
+# Configure logging to ERROR and DEBUG
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Access environment variables
@@ -95,7 +94,13 @@ def generate_sql_query(natural_query):
                     max_tokens=500,
                     temperature=0.7
                 )
+                # Check if response is valid
+                if not response or not hasattr(response, 'choices') or not response.choices:
+                    logger.error("Invalid API response: No choices returned")
+                    return "SELECT 'Error: Invalid API response' AS error"
+                
                 sql_query = response.choices[0].message.content.strip()
+                logger.debug(f"Generated SQL query: {sql_query}")
 
                 # Clean up the query if it includes markdown
                 if sql_query.startswith("```sql") and sql_query.endswith("```"):
@@ -110,13 +115,14 @@ def generate_sql_query(natural_query):
 
                 return sql_query
             except Exception as e:
-                if "rate limit" in str(e).lower() or "429" in str(e).lower():
+                error_msg = str(e)
+                logger.error(f"API call failed (attempt {attempt + 1}): {error_msg}")
+                if "rate limit" in error_msg.lower() or "429" in error_msg.lower():
                     if attempt < 2:
-                        time.sleep(2 ** attempt)  # Exponential backoff: 1s, 2s
+                        time.sleep(2 ** (attempt + 1))  # Exponential backoff: 2s, 4s
                         continue
-                logger.error(f"Error generating SQL query: {str(e)}")
-                return f"SELECT 'Error: {str(e)}' AS error"
-        return "SELECT 'Rate limit exceeded after retries' AS error"
+                return f"SELECT 'Error: {error_msg.replace('\'', '\'\'')}' AS error"
+        return "SELECT 'Error: Rate limit exceeded after retries' AS error"
     except Exception as e:
         logger.error(f"Error generating SQL query: {str(e)}")
-        return f"SELECT 'Error: {str(e)}' AS error"
+        return f"SELECT 'Error: {str(e).replace('\'', '\'\'')}' AS error"
