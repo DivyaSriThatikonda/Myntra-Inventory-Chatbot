@@ -121,6 +121,7 @@
 #         logger.error(f"Error generating SQL query: {str(e)}")
 #         return f"SELECT 'Error: {str(e)}' AS error"
 
+
 from dotenv import load_dotenv
 import os
 import logging
