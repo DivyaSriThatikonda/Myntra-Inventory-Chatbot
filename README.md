@@ -1,4 +1,4 @@
-# # Myntra Inventory Analysis Chatbot 🛍️
+## Myntra Inventory Analysis Chatbot 🛍️
 
 Yo, welcome to my **Myntra Inventory Analysis Chatbot**! This slick **Streamlit** app is your fashion AI buddy, answering questions like “How many H&M kurtas are left?” with *bam*—dope rupee charts and alerts. It’s built to make Myntra’s inventory game super easy and cook like a pro! 😎
 
