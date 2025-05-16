@@ -22,7 +22,7 @@ Check it out: [myntra-inventory-chatbot.streamlit.app](https://myntra-inventory-
 
 ## How It Works 🛠️
 1. Type a question in the app’s sidebar (e.g., “Revenue of H&M tops”).
-2. **LangChain’s SQLDatabaseChain** and **Gemini 1.5 Pro API** turn it into a **PostgreSQL query**.
+2. **LangChain’s SQLDatabaseChain** and **DeepSeek-V3-0324** turn it into a **PostgreSQL query**.
 3. Data’s pulled from **Neon**’s database (104K+ rows, 500+ brands).
 4. **Plotly Express** shows charts with time filters and insights, plus alerts for low stock.
 
@@ -85,14 +85,14 @@ Wanna make it cook? Here’s how:
 2. **What You Need**:
    - Python 3.10+
    - **Neon** PostgreSQL account
-   - **Gemini API** key (from Google AI Studio)
+   - **DeepSeek-V3-0324 API** key (from openrouter.ai)
    - Packages: `streamlit`, `plotly`, `pandas`, `sqlalchemy`, `psycopg2`, `langchain`, `google-generativeai`
 3. **Install Packages**:
    ```bash
    pip install -r requirements.txt
    ```
 4. **Setup Steps**:
-   - Add your **Neon** connection string  and **Gemini API** key to `.env`.
+   - Add your **Neon** connection string  and **DeepSeek-V3-0324 API** key to `.env`.
    - Load `myntra_fashion_clothing.csv` and `sales_and_stock_info.csv` into **Neon** using `psql \copy`.
 5. **Run the App**:
    ```bash
@@ -115,5 +115,5 @@ Wanna make it cook? Here’s how:
 ## Wanna Connect? 🤝
 Hit me up on LinkedIn or scope the code! 
 
-**Connect**: [LinkedIn](#)  
+**Connect**: [LinkedIn](https://www.linkedin.com/in/divyasri-thatikonda/)
 **Live Demo**: [myntra-inventory-chatbot.streamlit.app](https://myntra-inventory-chatbot-e4pjybdmi2pbfvdypumcda.streamlit.app/)
