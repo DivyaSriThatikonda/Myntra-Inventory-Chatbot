@@ -67,12 +67,30 @@ def preprocess_query(query):
             query = query.replace(cat.lower(), cat)  # Preserve exact category case
     return query
 
-# Generate SQL query with retry logic
+# # Generate SQL query with retry logic
+# def generate_sql_query(natural_query):
+#     try:
+#         brand_samples = ", ".join(BRAND_NAMES[:5])
+#         category_samples = ", ".join(CATEGORIES[:5])
+#         individual_category_samples = ", ".join(INDIVIDUAL_CATEGORIES[:5])
+#         sample_questions = "\n".join([f"- '{k}': {v}" for k, v in SAMPLE_QUESTIONS.items()])
+
+#         prompt = PROMPT_TEMPLATE.format(
+#             query=natural_query,
+#             brand_samples=brand_samples,
+#             category_samples=category_samples,
+#             individual_category_samples=individual_category_samples,
+#             sample_questions=sample_questions,
+#             brand_count=len(BRAND_NAMES),
+#             category_count=len(CATEGORIES),
+#             individual_category_count=len(INDIVIDUAL_CATEGORIES)
+#         )
+
 def generate_sql_query(natural_query):
     try:
-        brand_samples = ", ".join(BRAND_NAMES[:5])
-        category_samples = ", ".join(CATEGORIES[:5])
-        individual_category_samples = ", ".join(INDIVIDUAL_CATEGORIES[:5])
+        brand_samples = ", ".join(BRAND_NAMES)
+        category_samples = ", ".join(CATEGORIES)
+        individual_category_samples = ", ".join(INDIVIDUAL_CATEGORIES)
         sample_questions = "\n".join([f"- '{k}': {v}" for k, v in SAMPLE_QUESTIONS.items()])
 
         prompt = PROMPT_TEMPLATE.format(
@@ -85,7 +103,6 @@ def generate_sql_query(natural_query):
             category_count=len(CATEGORIES),
             individual_category_count=len(INDIVIDUAL_CATEGORIES)
         )
-
         processed_query = preprocess_query(natural_query)
         for attempt in range(3):  # Retry up to 3 times
             try:
